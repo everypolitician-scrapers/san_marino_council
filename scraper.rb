@@ -30,7 +30,7 @@ def scrape_mp(url)
   cell = ->(name, ntype='text()') { 
     node = noko.xpath("//span[starts-with(text(), '#{name}')]/following::#{ntype}") or return
     return if node.nil? || node.empty?
-    node.first.text.force_encoding("BINARY").delete(160.chr) 
+    node.first.text.force_encoding('BINARY').delete(160.chr).gsub(/[[:space:]]+/, ' ').strip
   }
 
   data = { 
@@ -41,19 +41,19 @@ def scrape_mp(url)
     family_name: cell.('cognome'),
     qualifica: cell.('qualifica').downcase,
     birth_date: date_from(cell.('data nascita')),
-    party: cell.('gruppo', 'a'),
+    party: cell.('gruppo', 'a') || 'Independent',
     photo: noko.css('.fotolunga img/@src').text,
     term: 2012,
     source: url.to_s,
   }
   data[:photo] = URI.join(url, data[:photo]).to_s unless data[:photo].empty?
-  puts data
+  # puts data
   ScraperWiki.save_sqlite([:id, :term], data)
 end
 
 term = {
   id: 2012,
-  name: 'Assembly 2012–',
+  name: 'Council 2012–',
   start_date: '2012-12-26',
   source: 'http://www.consigliograndeegenerale.sm/on-line/home/lavori-consiliari/dettagli-delle-convocazioni/scheda17129961.html',
 }
