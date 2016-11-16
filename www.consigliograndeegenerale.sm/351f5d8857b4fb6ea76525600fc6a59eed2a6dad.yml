@@ -1,0 +1,33 @@
+---
+request:
+  method: get
+  uri: http://www.consigliograndeegenerale.sm/on-line/home/composizione/elenco-consiglieri.html
+  body:
+    encoding: US-ASCII
+    string: ''
+  headers:
+    Accept-Encoding:
+    - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+    Accept:
+    - '*/*'
+    User-Agent:
+    - Ruby
+response:
+  status:
+    code: 200
+    message: OK
+  headers:
+    Date:
+    - Wed, 16 Nov 2016 12:06:16 GMT
+    Server:
+    - Apache
+    Set-Cookie:
+    - JSESSIONID=E901C5744FCD7643B05221781684E83A.tomcat1lb; Path=/on-line
+    Transfer-Encoding:
+    - chunked
+    Content-Type:
+    - text/html;charset=ISO-8859-1
+  body:
+    encoding: ASCII-8BIT
+  http_version: 
+recorded_at: Wed, 16 Nov 2016 12:06:20 GMT
