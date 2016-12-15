@@ -51,12 +51,4 @@ def scrape_mp(url)
   ScraperWiki.save_sqlite([:id, :term], data)
 end
 
-term = {
-  id: 2012,
-  name: 'Council 2012–',
-  start_date: '2012-12-26',
-  source: 'http://www.consigliograndeegenerale.sm/on-line/home/lavori-consiliari/dettagli-delle-convocazioni/scheda17129961.html',
-}
-ScraperWiki.save_sqlite([:id], term, 'terms')
-
 scrape_list('http://www.consigliograndeegenerale.sm/on-line/home/composizione/elenco-consiglieri.html')
