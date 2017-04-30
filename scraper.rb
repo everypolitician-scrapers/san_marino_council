@@ -18,13 +18,60 @@ class MembersPage < Scraped::HTML
   end
 end
 
-def noko_for(url)
-  Nokogiri::HTML(open(url).read)
-end
+class MemberPage < Scraped::HTML
+  decorator Scraped::Response::Decorator::CleanUrls
 
-def date_from(date)
-  return unless date
-  Date.parse(date).to_s rescue ''
+  field :id do
+    url.to_s[/scheda(\d+).html/, 1]
+  end
+
+  field :name do
+    "#{given_name} #{family_name}"
+  end
+
+  field :sort_name do
+    "#{family_name}, #{given_name}"
+  end
+
+  field :given_name do
+    cell('nome')
+  end
+
+  field :family_name do
+    cell('cognome')
+  end
+
+  field :qualifica do
+    cell('qualifica')
+  end
+
+  field :birth_date do
+    date_from(cell('data nascita'))
+  end
+
+  field :party do
+    cell('gruppo') || 'Independent'
+  end
+
+  field :photo do
+    noko.css('.fotolunga img/@src').text
+  end
+
+  field :source do
+    url.to_s
+  end
+
+  private
+
+  def date_from(date)
+    return unless date
+    Date.parse(date).to_s rescue ''
+  end
+
+  # TODO: move this into a decorator
+  def cell(field)
+    noko.xpath('.//span[@class="descrizione" and starts-with(.,"%s:")]/following-sibling::text()' % field).text.force_encoding('BINARY').delete(160.chr).tidy
+  end
 end
 
 def scraper(h)
@@ -39,30 +86,9 @@ def scrape_list(url)
 end
 
 def scrape_mp(url)
-  noko = noko_for(url)
-
-  cell = lambda do |name, ntype = 'text()'|
-    (node = noko.xpath("//span[starts-with(text(), '#{name}')]/following::#{ntype}")) || return
-    return if node.nil? || node.empty?
-    node.first.text.force_encoding('BINARY').delete(160.chr).gsub(/[[:space:]]+/, ' ').strip
-  end
-
-  data = {
-    id:          url.to_s[/scheda(\d+).html/, 1],
-    name:        cell.call('nome') + ' ' + cell.call('cognome'),
-    sort_name:   cell.call('cognome') + ', ' + cell.call('nome'),
-    given_name:  cell.call('nome'),
-    family_name: cell.call('cognome'),
-    qualifica:   cell.call('qualifica').downcase,
-    birth_date:  date_from(cell.call('data nascita')),
-    party:       cell.call('gruppo', 'a') || 'Independent',
-    photo:       noko.css('.fotolunga img/@src').text,
-    term:        2012,
-    source:      url.to_s,
-  }
-  data[:photo] = URI.join(url, data[:photo]).to_s unless data[:photo].empty?
+  data = scraper(url => MemberPage).to_h
   puts data.reject { |_, v| v.to_s.empty? }.sort_by { |k, _| k }.to_h if ENV['MORPH_DEBUG']
-  ScraperWiki.save_sqlite(%i[id term], data)
+  ScraperWiki.save_sqlite(%i[id], data)
 end
 
 ScraperWiki.sqliteexecute('DROP TABLE data') rescue nil
