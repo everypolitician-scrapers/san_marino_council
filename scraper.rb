@@ -49,7 +49,7 @@ def scrape_mp(url)
   }
   data[:photo] = URI.join(url, data[:photo]).to_s unless data[:photo].empty?
   # puts data
-  ScraperWiki.save_sqlite(%i(id term), data)
+  ScraperWiki.save_sqlite(%i[id term], data)
 end
 
 scrape_list('http://www.consigliograndeegenerale.sm/on-line/home/composizione/elenco-consiglieri.html')
