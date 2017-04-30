@@ -49,7 +49,7 @@ def scrape_mp(url)
     source:      url.to_s,
   }
   data[:photo] = URI.join(url, data[:photo]).to_s unless data[:photo].empty?
-  # puts data
+  puts data.reject { |_, v| v.to_s.empty? }.sort_by { |k, _| k }.to_h if ENV['MORPH_DEBUG']
   ScraperWiki.save_sqlite(%i[id term], data)
 end
 
