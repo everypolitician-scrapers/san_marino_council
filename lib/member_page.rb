@@ -34,7 +34,7 @@ class MemberPage < Scraped::HTML
   end
 
   field :party do
-    cell('gruppo') || 'Independent'
+    noko.xpath('.//span[@class="descrizione" and starts-with(.,"gruppo")]/following-sibling::a').text.tidy
   end
 
   field :photo do
