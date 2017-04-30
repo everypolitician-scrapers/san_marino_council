@@ -10,18 +10,30 @@ require 'open-uri/cached'
 OpenURI::Cache.cache_path = '.cache'
 # require 'scraped_page_archive/open-uri'
 
+class MembersPage < Scraped::HTML
+  decorator Scraped::Response::Decorator::CleanUrls
+
+  field :member_urls do
+    noko.css('div.membro h3 a/@href').map(&:text)
+  end
+end
+
 def noko_for(url)
   Nokogiri::HTML(open(url).read)
 end
 
 def date_from(date)
   return unless date
-  Date.parse(date).to_s
+  Date.parse(date).to_s rescue ''
+end
+
+def scraper(h)
+  url, klass = h.to_a.first
+  klass.new(response: Scraped::Request.new(url: url).response)
 end
 
 def scrape_list(url)
-  noko = noko_for(url)
-  noko.css('div.membro h3 a/@href').map(&:text).each do |link|
+  scraper(url => MembersPage).member_urls.each do |link|
     scrape_mp URI.join(url, link)
   end
 end
