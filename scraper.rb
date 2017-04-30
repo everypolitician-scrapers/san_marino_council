@@ -53,4 +53,5 @@ def scrape_mp(url)
   ScraperWiki.save_sqlite(%i[id term], data)
 end
 
+ScraperWiki.sqliteexecute('DROP TABLE data') rescue nil
 scrape_list('http://www.consigliograndeegenerale.sm/on-line/home/composizione/elenco-consiglieri.html')
