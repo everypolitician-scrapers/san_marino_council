@@ -52,8 +52,10 @@ class MemberPage < Scraped::HTML
     Date.parse(date).to_s rescue ''
   end
 
-  # TODO: move this into a decorator
+  # TODO: handle the encoding issue at a different level
   def cell(field)
-    noko.xpath('.//span[@class="descrizione" and starts-with(.,"%s:")]/following-sibling::text()' % field).text.force_encoding('BINARY').delete(160.chr).tidy
+    noko.xpath('.//span[@class="descrizione" and starts-with(.,"%s:")]/following-sibling::text()' % field).text
+        .force_encoding('UTF-8').encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
+        .tr(' ', ' ').tidy
   end
 end
