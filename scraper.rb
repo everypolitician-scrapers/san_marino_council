@@ -18,16 +18,17 @@ def scraper(h)
 end
 
 def scrape_list(url)
-  scraper(url => MembersPage).member_urls.each do |link|
+  scraper(url => MembersPage).member_urls.map do |link|
     scrape_mp URI.join(url, link)
   end
 end
 
 def scrape_mp(url)
   data = scraper(url => MemberPage).to_h
-  puts data.reject { |_, v| v.to_s.empty? }.sort_by { |k, _| k }.to_h if ENV['MORPH_DEBUG']
-  ScraperWiki.save_sqlite(%i[id], data)
 end
 
+data = scrape_list('http://www.consigliograndeegenerale.sm/on-line/home/composizione/elenco-consiglieri.html')
+data.each { |mem| puts mem.reject { |_, v| v.to_s.empty? }.sort_by { |k, _| k }.to_h } if ENV['MORPH_DEBUG']
+
 ScraperWiki.sqliteexecute('DROP TABLE data') rescue nil
-scrape_list('http://www.consigliograndeegenerale.sm/on-line/home/composizione/elenco-consiglieri.html')
+ScraperWiki.save_sqlite(%i[id], data)
