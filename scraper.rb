@@ -19,7 +19,7 @@ end
 
 def scrape_list(url)
   scraper(url => MembersPage).member_urls.map do |link|
-    scrape_mp URI.join(url, link)
+    scrape_mp link
   end
 end
 
