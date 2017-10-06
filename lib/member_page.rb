@@ -47,8 +47,13 @@ class MemberPage < Scraped::HTML
 
   private
 
+  MONTHS_EN = %w[January February March April  May    June   July   August September October November December]
+  MONTHS_IT = %w[gennaio febbraio marzo aprile maggio giugno luglio agosto settembre ottobre novembre dicembre]
+  DATE_MAP  = MONTHS_IT.zip(MONTHS_EN).to_h
+
   def date_from(date)
     return unless date
+    DATE_MAP.each { |italian, english| date.sub!(italian, english) }
     Date.parse(date).to_s rescue ''
   end
 
