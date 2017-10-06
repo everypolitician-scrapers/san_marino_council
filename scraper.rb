@@ -17,17 +17,11 @@ def scraper(h)
   klass.new(response: Scraped::Request.new(url: url).response)
 end
 
-def scrape_list(url)
-  scraper(url => MembersPage).member_urls.map do |link|
-    scrape_mp link
-  end
-end
+START = 'http://www.consigliograndeegenerale.sm/on-line/home/composizione/elenco-consiglieri.html'
 
-def scrape_mp(url)
-  data = scraper(url => MemberPage).to_h
+data = scraper(START => MembersPage).member_urls.map do |url|
+  scraper(url => MemberPage).to_h
 end
-
-data = scrape_list('http://www.consigliograndeegenerale.sm/on-line/home/composizione/elenco-consiglieri.html')
 data.each { |mem| puts mem.reject { |_, v| v.to_s.empty? }.sort_by { |k, _| k }.to_h } if ENV['MORPH_DEBUG']
 
 ScraperWiki.sqliteexecute('DROP TABLE data') rescue nil
