@@ -1,0 +1,33 @@
+---
+request:
+  method: get
+  uri: http://www.consigliograndeegenerale.sm/on-line/home/composizione/elenco-consiglieri/scheda17151293.html
+  body:
+    encoding: US-ASCII
+    string: ''
+  headers:
+    Accept-Encoding:
+    - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+    Accept:
+    - "*/*"
+    User-Agent:
+    - Ruby
+response:
+  status:
+    code: 200
+    message: OK
+  headers:
+    Date:
+    - Sun, 08 Oct 2017 03:03:49 GMT
+    Server:
+    - Apache
+    Set-Cookie:
+    - JSESSIONID=AFBFDC3E2122A891F0547D87F8AD6F69.tomcat2lb; Path=/on-line
+    Transfer-Encoding:
+    - chunked
+    Content-Type:
+    - text/html;charset=ISO-8859-1
+  body:
+    encoding: ASCII-8BIT
+  http_version: 
+recorded_at: Sun, 08 Oct 2017 03:03:50 GMT
