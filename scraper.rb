@@ -17,7 +17,7 @@ def scraper(h)
   klass.new(response: Scraped::Request.new(url: url).response)
 end
 
-START = 'http://www.consigliograndeegenerale.sm/on-line/home/composizione/elenco-consiglieri.html'
+START = 'https://www.consigliograndeegenerale.sm/on-line/home/composizione/elenco-consiglieri.html'
 
 data = scraper(START => MembersPage).member_urls.map do |url|
   scraper(url => MemberPage).to_h
