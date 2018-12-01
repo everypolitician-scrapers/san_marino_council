@@ -18,11 +18,11 @@ response:
     message: OK
   headers:
     Date:
-    - Fri, 30 Nov 2018 22:26:45 GMT
+    - Sat, 01 Dec 2018 19:11:22 GMT
     Server:
     - Apache
     Set-Cookie:
-    - JSESSIONID=95F35F34F9BCB4B7B94F6949507C60D1.tomcat1lb; Path=/on-line; Secure
+    - JSESSIONID=188A5F67D6702D8AF2A6129E419639D2.tomcat1lb; Path=/on-line; Secure
     Content-Type:
     - text/html;charset=ISO-8859-1
     Content-Length:
@@ -30,4 +30,4 @@ response:
   body:
     encoding: ASCII-8BIT
   http_version: 
-recorded_at: Fri, 30 Nov 2018 22:26:46 GMT
+recorded_at: Sat, 01 Dec 2018 19:11:22 GMT
